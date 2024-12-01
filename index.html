@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الكاميرا</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        video, canvas {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function startCamera() {
+            alert("السلام عليكم");
+            // طلب إذن الوصول إلى الكاميرا
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then((stream) => {
+                    const video = document.getElementById('video');
+                    video.srcObject = stream;
+                    video.play();
+                })
+                .catch((error) => {
+                    alert("حدث خطأ: لم يتم منح إذن الكاميرا.");
+                    console.error(error);
+                });
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+
+            // رسم الإطار الحالي من الفيديو إلى الـ Canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // عرض الصورة في مكانها
+            const dataURL = canvas.toDataURL('image/png');
+            alert("تم التقاط الصورة بنجاح!");
+        }
+    </script>
+
+    <h1>مرحبًا بك!</h1>
+    <p>اضغط على الزر أدناه لتشغيل الكاميرا:</p>
+    <button onclick="startCamera()">تشغيل الكاميرا</button>
+    <br>
+    <video id="video" width="640" height="480" autoplay></video>
+    <br>
+    <button onclick="capturePhoto()">التقاط الصورة</button>
+    <br>
+    <canvas id="canvas" width="640" height="480"></canvas>
+</body>
+</html>
